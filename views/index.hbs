@@ -1,0 +1,189 @@
+<html>
+
+
+<head>
+	<meta charset = "utf-8">
+	<title> The Lamppost Project </title>
+	<link rel="stylesheet" type = "text/css">
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.css">   
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.js"></script>
+
+
+</head>
+
+<body style="background-color: rgba(10,10,10,.9)">
+
+	<script>
+		var w = window.innerWidth;
+		var h = window.innerHeight;
+		var count = 0;
+		var b = document.getElementsByClassName("btn btn-lg");
+
+		console.log(w)
+
+		var interval = setInterval(
+			function(){
+
+					var gridlength = b.length*2.6
+
+					count +=.04;
+					
+					for (var i = 0; i < b.length; i++) {
+
+					var alpha = (Math.sin(count+i*i)+1)/2
+					b[i].style.width = w/(gridlength) + "px";
+				    b[i].style.height = w/(gridlength) + "px";
+				    b[i].style.marginRight= .25*w/(gridlength) + "px";
+				    b[i].style.marginBottom= .25*w/(gridlength) + "px";
+				    b[i].style.marginLeft= .25*w/(gridlength) + "px";
+				    b[i].style.marginTop= .25*w/(gridlength) + "px";
+
+			    var blockColor = 255//Math.trunc(((i*i) % 4)/4 * 255) + 80
+					 b[i].style.backgroundColor = "rgba("+ blockColor + ","+ blockColor +","+ blockColor + "," +alpha + ")"
+					//console.log(alpha);
+					}
+				}, 20)
+
+		var start =function(){
+
+		interval = setInterval(
+			function(){
+					var gridlength = b.length*2.6
+
+					count +=.04;
+					
+					for (var i = 0; i < b.length; i++) {
+
+					var alpha = (Math.sin(count+i*i)+1)/2
+					b[i].style.width = w/(gridlength) + "px";
+				    b[i].style.height = w/(gridlength) + "px";
+				    b[i].style.marginRight= .25*w/(gridlength) + "px";
+				    b[i].style.marginBottom= .25*w/(gridlength) + "px";
+				    b[i].style.marginLeft= .25*w/(gridlength) + "px";
+				    b[i].style.marginTop= .25*w/(gridlength) + "px";
+
+			    var blockColor = 255//Math.trunc(((i*i) % 4)/4 * 255) + 80
+					 b[i].style.backgroundColor = "rgba("+ blockColor + ","+ blockColor +","+ blockColor + "," +alpha + ")"
+					//console.log(alpha);
+					}
+				}, 20)
+		}
+
+		var resize = function() {
+			w = window.innerWidth;
+			h = window.innerHeight;
+			}
+
+		window.onload = resize
+		window.onresize = resize
+
+		var stop = function(){
+			clearInterval(interval)
+		}
+
+		var alter = function(title,subtitle,src){
+			// console.log(title)
+			// console.log(subtitle)
+			// console.log(src)
+			$("#img_title").text(title)
+			$("#img_subtitle").text(subtitle)
+			document.getElementById("img_center").src=src
+			document.getElementById("img_center").onload = function(){
+				// console.log("height: " + document.getElementById("img_center").height)
+				// document.getElementById("img_center").width=w/3
+
+			}
+
+		}
+	</script>
+
+
+
+<div id="grid" style="text-align: center">
+{{#each lampposts1}}
+<button type="button" onclick="alter('{{city}} {{state}}', '{{address}}','{{imgUrl}}')" class="btn btn-lg" onmouseover = "stop()" onmouseout = "start()"
+style="height:50px;
+ 		width:50px;
+ 		background-color: rgba(0,0,0,.7);
+ 		border-color: black
+ 		border-radius:4px;
+ 		z-index: -1">
+</button>
+
+{{/each}}
+</div>
+
+
+<div style="display: flex; flex-direction: row; justify-content: center">
+
+<div id="grid2" style="display: flex; flex-direction: column; justify-content: center">
+{{#each lampposts2}}
+	<div>
+
+<button type="button" onclick="alter('{{city}} {{state}}', '{{address}}','{{imgUrl}}')" class="btn btn-lg" onmouseover = "stop()" onmouseout = "start()"
+style="height:50px;
+ 		width:50px;
+ 		background-color: rgba(0,0,0,.7);
+ 		border-color: black
+ 		border-radius:4px;
+ 		z-index: -1">
+</button>
+
+</div>
+{{/each}}
+
+</div>
+
+
+<div onmouseover = "stop()" onmouseout = "start()" style="text-align: center; 
+		background-color: white;
+		border-radius:4px;
+		padding: 5px 50px 50px">
+	<h2 id="img_title">The Lamppost Project</h2>
+	<h6 id="img_subtitle"></h6>
+	<img id="img_center" width="400" src= "https://lamppostproject.s3.amazonaws.com/1471493786050_Photo%20Aug%2017%2C%2011%2017%2046%20PM.jpg">
+</div>
+
+<div id="grid" style="display: flex; flex-direction: column; justify-content: center">
+{{#each lampposts3}}
+<div>
+<button type="button" onclick="alter('{{city}} {{state}}', '{{address}}','{{imgUrl}}')" class="btn btn-lg"
+onmouseover = "stop()" onmouseout = "start()"
+style="height:50px;
+ 		width:50px;
+ 		background-color: rgba(0,0,0,.7);
+ 		border-color: black
+ 		border-radius:4px;
+ 		z-index: -1">
+</button>
+</div>
+{{/each}}
+</div>
+
+</div>
+
+<div id="grid" style="text-align: center">
+{{#each lampposts4}}
+<button type="button" onclick="alter('{{city}} {{state}}', '{{address}}','{{imgUrl}}')" class="btn btn-lg"
+onmouseover = "stop()" onmouseout = "start()"
+style="height:50px;
+ 		width:50px;
+ 		background-color: rgba(0,0,0,.7);
+ 		border-color: black
+ 		border-radius:4px;
+ 		z-index: -1">
+</button>
+
+{{/each}}
+</div>
+
+
+
+
+</body>
+
+	<script src="display.js"></script>
+
+</html>
