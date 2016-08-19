@@ -60,6 +60,7 @@
   function
    sendFileWhenDone(fileData){
     $.ajax({
+      url: '/contribute',
       type: "POST",
       data: fileData,
       processData: false,
