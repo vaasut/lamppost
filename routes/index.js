@@ -114,71 +114,95 @@ router.post('/contribute', function(req,res,next){
 			return next();
 		} else {
 			console.log("uploading photo...");
-			if (req.body.key === "wewilllighttheway"){
-				key = true;
-			}
 			console.log("uploading photo x2...");
 			
 			Lamppost.find(function(err,lampposts){
 				console.log(lampposts.length)
-				if (lampposts.length < 100){
-					max = true;
-					}  
-				});
+				if (lampposts.length < 230){ //&& req.body.key === "wewilllighttheway"){
+					
+					console.log(key);
+					console.log(max);
+						if (valid){
+							//there was a better way to do this but synchronous vs asynchronous is confusing :\
 
-				console.log(key);
-				console.log(max);
-				if (valid){
+							console.log("city: " + req.body.city)
+							console.log("state: " + req.body.state)
+							console.log("country: " + req.body.country)
 
-					if (req.body.state === ""){
-						req.body.state = req.body.country
-					}
+							if (!req.body.state && !req.body.city && !req.body.country){
+								req.body.city = "Unknown Location";
+								}
 
-					if (req.body.city === ""){
-						req.body.city = req.body.state;
-						req.body.state = '';
-					}
+							else if (!req.body.state && !req.body.city){
+								console.log("one")
+								req.body.city = req.body.country
+							}
 
-					if (req.body.city === ""){
-						req.body.city = "Unknown Location"
-					}
+							else if (!req.body.state && !!req.body.city && !!req.body.country){
+								console.log("two")
+								req.body.city += ","
+								req.body.state = req.body.country;
+							}
 
-					else {
-						req.body.city += ','
-					}
+							else if (!!req.body.state && !req.body.city){
+								req.body.city = req.body.state + ',';
+								req.body.state = req.body.country;
+							}
 
-					var l = new Lamppost({
-						// image = req.body.image,
-						country: req.body.country,
-						state: req.body.state,
-						city: req.body.city,
-						address: req.body.address,
-						imgUrl: req.file.location
-					})
-				
-					l.save(function(err,lamppost){
-						if (err){
-							console.log(err);
+
+							// if (req.body.city === "" || req.body.city === "undefined"){
+							// 	console.log("three")
+							// 	req.body.city = "Unknown Location"
+							// }
+
+							else{
+								req.body.city += ','
+							}
+
+							var l = new Lamppost({
+								// image = req.body.image,
+								country: req.body.country,
+								state: req.body.state,
+								city: req.body.city,
+								address: req.body.address,
+								imgUrl: req.file.location
+							})
+						
+							l.save(function(err,lamppost){
+								if (err){
+									console.log(err);
+									res.status(500).json({
+										success: false,
+										error: err
+									});
+									return;
+									}
+								//console.log(shipping);
+								res.json({
+									success: true,
+									redirect: '/'
+								});
+							});
+						}
+						else{
+							console.log("Try Again");
 							res.status(500).json({
 								success: false,
-								error: err
-							});
-							return;
-							}
-						//console.log(shipping);
-						res.json({
-							success: true,
-							redirect: '/'
-						});
-					});
-				}
-				else{
-					console.log("Try Again");
-					res.status(500).json({
-						success: false,
-						error: "Try again"
-					})
-				}
+								error: "Try again"
+							})
+							res.redirect("/contribute")
+						}
+
+
+					}
+					else{
+						console.log("Something is not right...")
+						res.status(500).json({
+								success: false,
+								error: "Try again"
+							})
+					}
+				});	
 		}
 	})
 

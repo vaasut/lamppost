@@ -4,14 +4,14 @@
 
 <form id = 'fileForm' method = 'post' class="form-horizontal" role="form" enctype="multipart/form-data">
   <div class="form-group">
-  	<h1 style= "text-align: center"> Add a Lamppost </h1>
+    <h1 style= "text-align: center"> Add a Lamppost </h1>
 
-  	<div class="form-group">
-	   <label class="control-label col-sm-2" for="lamppostImage">Upload Image:</label>
-	    <div class="col-sm-10">
+    <div class="form-group">
+     <label class="control-label col-sm-2" for="lamppostImage">Upload Image:</label>
+      <div class="col-sm-10">
       <input id ="fInput" type="file" name="lamppostImage" accept="image/*">
-	    </div>
-  	</div>
+      </div>
+    </div>
 
     <label class="control-label col-sm-2" for="country">Country:</label>
     <div class="col-sm-10">
@@ -57,17 +57,14 @@
 <script type="text/javascript">
   
   var fileForm = $("#fileForm");
-
   function
    sendFileWhenDone(fileData){
-
     $.ajax({
       type: "POST",
       data: fileData,
       processData: false,
       contentType: false,
       success: function(JSONsentFromServer){
-
         if (JSONsentFromServer.success){
           console.log("[Message]", JSONsentFromServer.redirect);
           window.location = JSONsentFromServer.redirect;
@@ -79,29 +76,21 @@
       }
     })
    }
-
    fileForm.on("submit",function(evt){
     evt.preventDefault();
-
     console.log($("#fInput"))
-
     var fileFormElement = fileForm[0];
-
     var fileInput = $("#fInput");
     console.log("fileInput", fileInput);
-
     var file = fileInput[0].files[0];
-
     fd = new FormData();
-
     fd.append("lamppostImage", file);
-
+    fd.append("city", $("#city").val());
+    fd.append("state", $("#state").val());
+    fd.append("country", $("#country").val());
+    fd.append("address", $("#address").val());
+    fd.append("key", $("#key").val());
     sendFileWhenDone(fd);
-
    })
 </script>
-
-
-
-
 
