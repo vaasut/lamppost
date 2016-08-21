@@ -1,1 +1,1 @@
-module.exports = "mongodb://vaasu:Turtle12@ds027751.mlab.com:27751/lamppost_project"
+module.exports = 
