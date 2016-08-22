@@ -15,7 +15,6 @@ var options = {
 
 var s3 = new aws.S3(options);
 var valid=false;
-var key = false;
 var max = false
 
 var upload = multer({
@@ -106,107 +105,104 @@ router.get('/contribute', function(req,res,next){
 var uploadLampostImage = upload.single('lamppostImage');
 
 router.post('/contribute', function(req,res,next){
-	console.log("in here");
-	uploadLampostImage(req, res, function(err){
-		console.log("ABAXBJKDS");
-		if (err){
-			console.log("error: " + err);
-			return next();
-		} else {
-			console.log("uploading photo...");
-			console.log("uploading photo x2...");
-			
-			Lamppost.find(function(err,lampposts){
-				console.log(lampposts.length)
-				if (lampposts.length < 230){ //&& req.body.key === "wewilllighttheway"){
-					
-					console.log(key);
-					console.log(max);
-						if (valid){
-							//there was a better way to do this but synchronous vs asynchronous is confusing :\
+	// console.log("in here");
+	// console.log(process.env.submissionKey)
 
-							console.log("city: " + req.body.city)
-							console.log("state: " + req.body.state)
-							console.log("country: " + req.body.country)
+		uploadLampostImage(req, res, function(err){
+			// console.log("ABAXBJKDS");
+			if (err){
+				console.log("error: " + err);
+				return next();
+			} else {
+				// console.log("uploading photo...");
+				// console.log("uploading photo x2...");
+				
+				Lamppost.find(function(err,lampposts){
+					console.log(lampposts.length)
+					if (lampposts.length < 230){
+						
+						// console.log(key);
+							if (valid){
+								//there was a better way to do this but synchronous vs asynchronous is confusing :\
 
-							if (!req.body.state && !req.body.city && !req.body.country){
-								req.body.city = "Unknown Location";
+								// console.log("city: " + req.body.city)
+								// console.log("state: " + req.body.state)
+								// console.log("country: " + req.body.country)
+
+								if (!req.body.state && !req.body.city && !req.body.country){
+									req.body.city = "Unknown Location";
+									}
+
+								else if (!req.body.state && !req.body.city){
+									req.body.city = req.body.country
 								}
 
-							else if (!req.body.state && !req.body.city){
-								console.log("one")
-								req.body.city = req.body.country
-							}
+								else if (!req.body.state && !!req.body.city && !!req.body.country){
+									req.body.city += ","
+									req.body.state = req.body.country;
+								}
 
-							else if (!req.body.state && !!req.body.city && !!req.body.country){
-								console.log("two")
-								req.body.city += ","
-								req.body.state = req.body.country;
-							}
-
-							else if (!!req.body.state && !req.body.city){
-								req.body.city = req.body.state + ',';
-								req.body.state = req.body.country;
-							}
+								else if (!!req.body.state && !req.body.city){
+									req.body.city = req.body.state + ',';
+									req.body.state = req.body.country;
+								}
 
 
-							// if (req.body.city === "" || req.body.city === "undefined"){
-							// 	console.log("three")
-							// 	req.body.city = "Unknown Location"
-							// }
+								// if (req.body.city === "" || req.body.city === "undefined"){
+								// 	console.log("three")
+								// 	req.body.city = "Unknown Location"
+								// }
 
-							else{
-								req.body.city += ','
-							}
+								else{
+									req.body.city += ','
+								}
 
-							var l = new Lamppost({
-								// image = req.body.image,
-								country: req.body.country,
-								state: req.body.state,
-								city: req.body.city,
-								address: req.body.address,
-								imgUrl: req.file.location
-							})
-						
-							l.save(function(err,lamppost){
-								if (err){
-									console.log(err);
-									res.status(500).json({
-										success: false,
-										error: err
+								var l = new Lamppost({
+									// image = req.body.image,
+									country: req.body.country,
+									state: req.body.state,
+									city: req.body.city,
+									address: req.body.address,
+									imgUrl: req.file.location
+								})
+							
+								l.save(function(err,lamppost){
+									if (err){
+										console.log(err);
+										res.status(500).json({
+											success: false,
+											error: err
+										});
+										return;
+										}
+									//console.log(shipping);
+									res.json({
+										success: true,
+										redirect: '/'
 									});
-									return;
-									}
-								//console.log(shipping);
-								res.json({
-									success: true,
-									redirect: '/'
 								});
-							});
+							}
+							else{
+								console.log("Try Again fakjshdg");
+								res.status(500).json({
+									success: false,
+									error: "Try again"
+								})
+								
+							}
+
+
 						}
 						else{
-							console.log("Try Again");
+							console.log("Something is not right...")
 							res.status(500).json({
-								success: false,
-								error: "Try again"
-							})
-							res.redirect("/contribute")
+									success: false,
+									error: "Try again"
+								})
 						}
-
-
-					}
-					else{
-						console.log("Something is not right...")
-						res.status(500).json({
-								success: false,
-								error: "Try again"
-							})
-					}
-				});	
-		}
-	})
-
+					});	
+			}
+		})
 });
-
 
 module.exports = router;
