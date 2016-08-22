@@ -1,1 +1,1 @@
-module.exports = 
+module.exports = MONGODB_URI
