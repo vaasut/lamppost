@@ -74,7 +74,7 @@
       contentType: false,
       success: function(JSONsentFromServer){
         if (JSONsentFromServer.success){
-          console.log("[Message]", JSONsentFromServer.redirect);
+          // console.log("[Message]", JSONsentFromServer.redirect);
           window.location = JSONsentFromServer.redirect;
         }
       },
@@ -86,10 +86,10 @@
    }
    fileForm.on("submit",function(evt){
     evt.preventDefault();
-    console.log($("#fInput"))
+    // console.log($("#fInput"))
     var fileFormElement = fileForm[0];
     var fileInput = $("#fInput");
-    console.log("fileInput", fileInput);
+    // console.log("fileInput", fileInput);
     var file = fileInput[0].files[0];
     fd = new FormData();
     fd.append("lamppostImage", file);
